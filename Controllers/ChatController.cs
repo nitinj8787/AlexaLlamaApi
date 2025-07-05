@@ -56,6 +56,49 @@ namespace AlexaLlamaApi.Controllers
 
                     return Ok(welcomeResponse);
                 }
+                                
+                if (requestType == "IntentRequest" && alexaRequest.Request?.Intent?.Name == "FollowUpIntent")
+                {
+                    var resposne = await _chatMemoryService.GetOnGoingResponse(userId);
+
+                    if (resposne != null)
+                    {
+                        var alexaResponse = new AlexaResponse
+                        {
+                            Response = new AlexaResponseBody
+                            {
+                                OutputSpeech = new OutputSpeech
+                                {
+                                    Text = resposne
+                                },
+                                ShouldEndSession = false
+                            }
+                        };
+                        return Ok(alexaResponse);
+                    }
+                    else
+                    {
+                        var alexaResponse = new AlexaResponse
+                        {
+                            Response = new AlexaResponseBody
+                            {
+                                OutputSpeech = new OutputSpeech
+                                {
+                                    Text = "still working on it. Please ask 'alexa continue' again in a moment."
+                                },
+                                Reprompt = new Reprompt
+                                {
+                                    OutputSpeech = new OutputSpeech
+                                    {
+                                        Text = "you can say continue or what's the update?"
+                                    }
+                                },
+                                ShouldEndSession = false
+                            }
+                        };
+                        return Ok(alexaResponse);
+                    }
+                }
 
                 if (requestType == "IntentRequest")
                 {
@@ -92,7 +135,7 @@ namespace AlexaLlamaApi.Controllers
 
                     // var llamaResponse = _llamaService.SendToLlamaModelAsync(userMessage);
                     // Force execution via Task.Run so status is Running
-                    var llamaResponse = Task.Run(() => _llamaService.SendToLlamaModelAsync(userMessage));
+                    var llamaResponse = _llamaService.SendToLlamaModelAsync(userMessage);
 
                     Console.WriteLine($"llamaResponse.IsCompleted = {llamaResponse.IsCompleted}");
                     Console.WriteLine($"llamaResponse.IsFaulted = {llamaResponse.IsFaulted}");
@@ -135,49 +178,6 @@ namespace AlexaLlamaApi.Controllers
                                 OutputSpeech = new OutputSpeech
                                 {
                                     Text = "I'm still thinking. Please ask 'alexa continue' again in a moment."
-                                },                                
-                                Reprompt = new Reprompt
-                                {
-                                    OutputSpeech = new OutputSpeech
-                                    {
-                                        Text = "you can say continue or what's the update?"
-                                    }
-                                },
-                                ShouldEndSession = false
-                            }
-                        };
-                        return Ok(alexaResponse);
-                    }                    
-                }
-
-                if (requestType == "IntentRequest" && alexaRequest.Request?.Intent?.Name == "FollowUpIntent")
-                {
-                    var resposne = await _chatMemoryService.GetOnGoingResponse(userId);
-
-                    if (resposne != null)
-                    {
-                        var alexaResponse = new AlexaResponse
-                        {
-                            Response = new AlexaResponseBody
-                            {
-                                OutputSpeech = new OutputSpeech
-                                {
-                                    Text = resposne
-                                },
-                                ShouldEndSession = false
-                            }
-                        };
-                        return Ok(alexaResponse);
-                    }
-                    else
-                    {
-                        var alexaResponse = new AlexaResponse
-                        {
-                            Response = new AlexaResponseBody
-                            {
-                                OutputSpeech = new OutputSpeech
-                                {
-                                    Text = "still working on it. Please ask 'alexa continue' again in a moment."
                                 },
                                 Reprompt = new Reprompt
                                 {

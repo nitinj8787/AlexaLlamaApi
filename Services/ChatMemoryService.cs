@@ -28,7 +28,9 @@ namespace AlexaLlamaApi.Services
                 if(!task.LlamaTask.IsCompleted)
                 {
                     Console.WriteLine($"Task status when checking - GetOnGoingResponse: {task.LlamaTask.Status}");
-                    return await task.LlamaTask;
+                    var result =  await task.LlamaTask;
+                    Console.WriteLine($"after : Task status when checking - GetOnGoingResponse: {task.LlamaTask.Status} : {result}");
+                    return result;
                 }
             }
 

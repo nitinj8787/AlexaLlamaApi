@@ -8,7 +8,6 @@ namespace AlexaLlamaApi.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string _llamaApiUrl = "http://localhost:11434/api/generate";
-        private static bool _llamaWarmedUp = false;
 
         public LlamaService(IHttpClientFactory httpClientFactory) //, IConfiguration configuration)
         {
@@ -18,17 +17,6 @@ namespace AlexaLlamaApi.Services
 
         public async Task<string> SendToLlamaModelAsync(string userMessage)
         {
-            if (!_llamaWarmedUp)
-            {
-                try
-                {
-                    await _httpClient.GetAsync(_llamaApiUrl); // warm-up GET
-                }
-                catch { /* ignore errors */ }
-
-                _llamaWarmedUp = true;
-            }
-
             Console.WriteLine("SendToLlamaModelAsync STARTED");
 
             Console.WriteLine($"[HTTP] Sending POST request to Llama at {DateTime.UtcNow:HH:mm:ss.fff}");
