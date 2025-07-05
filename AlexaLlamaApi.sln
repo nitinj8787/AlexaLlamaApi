@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaLlamaApi", "AlexaLlamaApi.csproj", "{11A92520-9B15-5716-9CC9-E3FE7A85E5E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexaLlamaApiTests", "..\AlexaLlamaApiTests\AlexaLlamaApiTests.csproj", "{3CAD9F66-87CA-4EF5-84D9-14762CDDE85D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11A92520-9B15-5716-9CC9-E3FE7A85E5E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11A92520-9B15-5716-9CC9-E3FE7A85E5E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11A92520-9B15-5716-9CC9-E3FE7A85E5E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11A92520-9B15-5716-9CC9-E3FE7A85E5E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CAD9F66-87CA-4EF5-84D9-14762CDDE85D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CAD9F66-87CA-4EF5-84D9-14762CDDE85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CAD9F66-87CA-4EF5-84D9-14762CDDE85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CAD9F66-87CA-4EF5-84D9-14762CDDE85D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FA7F48B7-A42F-4071-887E-9A9CA45970F1}
+	EndGlobalSection
+EndGlobal
