@@ -2,7 +2,7 @@ namespace AlexaLlamaApi.Interfaces
 {    
     public interface IChatMemoryService
     {
-        Task AddToMemoryAsync(string sessionId, string message);
-        Task<List<string>> GetChatHistoryAsync(string sessionId);
+        void AddToGoingResponse(string userId, Task<string> llmTask);
+        Task<string?> GetOnGoingResponse(string userId);
     }
 }

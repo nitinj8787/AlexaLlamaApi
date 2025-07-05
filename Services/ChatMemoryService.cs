@@ -1,36 +1,38 @@
 using AlexaLlamaApi.Interfaces;
+using AlexaLlamaApi.Models;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace AlexaLlamaApi.Services
 {
     public class ChatMemoryService : IChatMemoryService
     {
-        private readonly ConcurrentDictionary<string, List<string>> _chatMemory;
-
-        public ChatMemoryService()
+        private readonly ConcurrentDictionary<string, AlexaSessionState> _chatMemory = new();
+                      
+        public void AddToGoingResponse(string userId, Task<string> llmTask)
         {
-            _chatMemory = new ConcurrentDictionary<string, List<string>>();
+            Console.WriteLine($"adding userId: {userId}");
+            _chatMemory[userId] = new AlexaSessionState
+            {
+                UserId = userId,
+                LlamaTask = llmTask, 
+                CreatedAt = DateTime.UtcNow
+            };
         }
 
-        public async Task AddToMemoryAsync(string sessionId, string message)
+        public async Task<string?> GetOnGoingResponse(string userId)
         {
-            if (!_chatMemory.ContainsKey(sessionId))
+            Console.WriteLine($"retrieving userId: {userId}");
+            if (_chatMemory.TryGetValue(userId,out var task))
             {
-                _chatMemory[sessionId] = new List<string>();
+                if(!task.LlamaTask.IsCompleted)
+                {
+                    Console.WriteLine($"Task status when checking - GetOnGoingResponse: {task.LlamaTask.Status}");
+                    return await task.LlamaTask;
+                }
             }
 
-            _chatMemory[sessionId].Add(message);
-            await Task.CompletedTask;
-        }
-
-        public async Task<List<string>> GetChatHistoryAsync(string sessionId)
-        {
-            if (_chatMemory.TryGetValue(sessionId, out var chatHistory))
-            {
-                return await Task.FromResult(chatHistory);
-            }
-
-            return await Task.FromResult(new List<string>());
+            return null;
         }
     }
 }

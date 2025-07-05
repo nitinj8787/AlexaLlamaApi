@@ -8,27 +8,43 @@ namespace AlexaLlamaApi.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string _llamaApiUrl = "http://localhost:11434/api/generate";
+        private static bool _llamaWarmedUp = false;
 
         public LlamaService(IHttpClientFactory httpClientFactory) //, IConfiguration configuration)
         {
             _httpClient = httpClientFactory.CreateClient();
-            // _llamaApiUrl = configuration["LlamaApi:Url"] ?? throw new ArgumentNullException("LlamaApi:Url configuration is missing.");
-
-            
+            // _llamaApiUrl = configuration["LlamaApi:Url"] ?? throw new ArgumentNullException("LlamaApi:Url configuration is missing.");            
         }
 
         public async Task<string> SendToLlamaModelAsync(string userMessage)
         {
+            if (!_llamaWarmedUp)
+            {
+                try
+                {
+                    await _httpClient.GetAsync(_llamaApiUrl); // warm-up GET
+                }
+                catch { /* ignore errors */ }
+
+                _llamaWarmedUp = true;
+            }
+
+            Console.WriteLine("SendToLlamaModelAsync STARTED");
+
+            Console.WriteLine($"[HTTP] Sending POST request to Llama at {DateTime.UtcNow:HH:mm:ss.fff}");
+
             var response = await _httpClient.PostAsJsonAsync(_llamaApiUrl, new 
             { 
                 model = "gemma2:2b",
                 prompt = userMessage,
                 stream = false
-            });
+            }).ConfigureAwait(false);
+
+            Console.WriteLine("HTTP call done");
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<LlamaResponse>();
+                var result = await response.Content.ReadFromJsonAsync<LlamaResponse>().ConfigureAwait(false);
                 return result?.Response ?? "Sorry, I couldn't process your request.";
             }
 
