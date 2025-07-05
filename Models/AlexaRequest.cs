@@ -4,5 +4,7 @@ namespace AlexaLlamaApi.Models
     {
         public Session? Session { get; set; }
         public AlexaRequestBody? Request { get; set; }
+        public string Version { get; set; }        
+        public Context Context { get; set; }
     }
 }
